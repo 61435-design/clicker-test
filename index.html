@@ -16,6 +16,12 @@
                 <div id="clickCount">0</div>
             </div>
 
+            <div class="worlds">
+                <h2>Worlds</h2>
+                <div id="worldList"></div>
+                <div>Current World: <span id="currentWorld">Earth</span></div>
+            </div>
+
             <div class="upgrades">
                 <h2>Upgrades</h2>
                 <div id="upgradeList"></div>
@@ -28,3 +34,30 @@
             </div>
 
             <div class="multipliers">
+                <h2>Multipliers</h2>
+                <button data-multiplier="2">2×</button>
+                <button data-multiplier="4">4×</button>
+                <button data-multiplier="10">10×</button>
+            </div>
+
+            <div class="rebirth">
+                <h2>Rebirth</h2>
+                <button id="rebirthBtn">Rebirth</button>
+                <div>Rebirths: <span id="rebirthCount">0</span></div>
+                <div>Rebirth Multiplier: <span id="rebirthMultiplier">1×</span></div>
+            </div>
+
+            <div class="stats">
+                <h2>Stats</h2>
+                <div>Clicks: <span id="totalClicks">0</span></div>
+                <div>Multiplier: <span id="currentMultiplier">1×</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Click Sound -->
+    <audio id="clickSound" src="click.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
