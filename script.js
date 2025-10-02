@@ -33,7 +33,6 @@ function initUpgrades() {
     for (let i = 0; i < 100; i++) {
         upgradeCount[i] = 0;
         let btn = document.createElement("button");
-        btn.innerText = `Upgrade ${i + 1} (Cost: ${formatNumber(10 * (i+1))})`;
         btn.onclick = () => buyUpgrade(i);
         upgradeList.appendChild(btn);
     }
@@ -54,7 +53,7 @@ function buyUpgrade(index) {
     if (clicks >= cost) {
         clicks -= cost;
         upgradeCount[index]++;
-        clickPower += 1; // upgrades increase click power
+        clickPower += 1;
         playClickSound();
         render();
     }
@@ -117,6 +116,19 @@ function render() {
     document.getElementById("rebirthCount").innerText = rebirthCount;
     document.getElementById("rebirthMultiplier").innerText = rebirthMultiplier + "×";
     document.getElementById("clickPowerDisplay").innerText = clickPower;
+
+    const upgradeButtons = document.querySelectorAll("#upgradeList button");
+    upgradeButtons.forEach((btn, i) => {
+        let cost = 10 * (i + 1) * Math.pow(1.1, upgradeCount[i]);
+        btn.innerText = `Upgrade ${i + 1} (Cost: ${formatNumber(cost)})`;
+        if (clicks < cost) {
+            btn.classList.add("disabled");
+            btn.disabled = true;
+        } else {
+            btn.classList.remove("disabled");
+            btn.disabled = false;
+        }
+    });
 }
 
 document.getElementById("clickBtn").onclick = () => {
