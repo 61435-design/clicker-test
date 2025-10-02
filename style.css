@@ -40,7 +40,7 @@ button:hover {
     margin-bottom: 10px;
 }
 
-.upgrades, .automation, .multipliers, .stats {
+.upgrades, .automation, .multipliers, .stats, .worlds, .rebirth {
     margin-top: 20px;
     background: rgba(0,0,0,0.6);
     padding: 15px;
@@ -48,7 +48,7 @@ button:hover {
     box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
 }
 
-.upgrades h2, .automation h2, .multipliers h2, .stats h2 {
+h2 {
     margin-bottom: 10px;
 }
 
