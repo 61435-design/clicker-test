@@ -3,7 +3,6 @@ let totalClicks = 0;
 let multiplier = 1;
 let clickPower = 1;
 let autoClickers = 0;
-let autoInterval;
 let upgradeCount = [];
 let rebirthCount = 0;
 let rebirthMultiplier = 1;
@@ -67,21 +66,27 @@ function buyAutoClicker() {
     if (clicks >= cost) {
         clicks -= cost;
         autoClickers++;
-        if (!autoInterval) startAutoClickers();
         playClickSound();
         render();
     }
 }
 
 function startAutoClickers() {
-    autoInterval = setInterval(() => {
-        if (automationEnabled) {
+    // Auto clickers fire every 1ms
+    setInterval(() => {
+        if (automationEnabled && autoClickers > 0) {
             clicks += clickPower * multiplier * autoClickers;
             totalClicks += clickPower * multiplier * autoClickers;
             render();
         }
-        if (autoRebirthEnabled && clicks >= 1000) rebirth(true);
-    }, 1000);
+    }, 1);
+
+    // Auto rebirth checks every 5ms
+    setInterval(() => {
+        if (autoRebirthEnabled && clicks >= 1000) {
+            rebirth(true);
+        }
+    }, 5);
 }
 
 function changeWorld(index) {
