@@ -4,14 +4,27 @@ let multiplier = 1;
 let autoClickers = 0;
 let autoInterval;
 let upgradeCount = [];
+let rebirthCount = 0;
+let rebirthMultiplier = 1;
 
 const prefixes = ["M", "B", "T", "Q", "q", "s", "S", "Oc", "N", "D", "UD", "DD", "TD", "QD", "qD", "sD", "SD", "OcD", "ND", "V", "UV", "DV", "TV", "QV", "qV", "sV", "SV", "OcV", "NV", "Tr", "UTr", "DTr", "TTr", "QTr", "qTr", "sTr", "STr", "OcTr", "NTr", "Quadragontillion"];
+
+const worlds = [
+    { name: "Earth", multiplier: 1 },
+    { name: "Mars", multiplier: 2 },
+    { name: "Jupiter", multiplier: 4 },
+    { name: "Saturn", multiplier: 10 },
+    { name: "Neptune", multiplier: 20 },
+    { name: "Galaxy", multiplier: 50 }
+];
+
+let currentWorld = 0;
 
 function formatNumber(num) {
     let tier = Math.floor((("" + num).length - 1) / 3);
     if (tier === 0) return num.toString();
     let scale = Math.pow(10, tier * 3);
-    return (num / scale).toFixed(2) + prefixes[tier - 1] || "∞";
+    return (num / scale).toFixed(2) + (prefixes[tier - 1] || "∞");
 }
 
 function initUpgrades() {
@@ -25,12 +38,22 @@ function initUpgrades() {
     }
 }
 
+function initWorlds() {
+    const worldList = document.getElementById("worldList");
+    worlds.forEach((world, index) => {
+        let btn = document.createElement("button");
+        btn.innerText = world.name + " (" + world.multiplier + "×)";
+        btn.onclick = () => changeWorld(index);
+        worldList.appendChild(btn);
+    });
+}
+
 function buyUpgrade(index) {
     let cost = 10 * (index + 1) * Math.pow(1.1, upgradeCount[index]);
     if (clicks >= cost) {
         clicks -= cost;
         upgradeCount[index]++;
-        multiplier += 0.01; // slight increase
+        multiplier += 0.01;
         playClickSound();
         render();
     }
@@ -53,6 +76,30 @@ function buyAutoClicker() {
     }
 }
 
+function changeWorld(index) {
+    currentWorld = index;
+    multiplier = worlds[currentWorld].multiplier * rebirthMultiplier;
+    render();
+}
+
+function rebirth() {
+    if (clicks >= 1000) {
+        clicks = 0;
+        totalClicks = 0;
+        rebirthCount++;
+        rebirthMultiplier = Math.pow(10, rebirthCount + 1);
+        multiplier = worlds[currentWorld].multiplier * rebirthMultiplier;
+        upgradeCount = Array(100).fill(0);
+        autoClickers = 0;
+        clearInterval(autoInterval);
+        autoInterval = null;
+        playClickSound();
+        render();
+    } else {
+        alert("You need at least 1000 clicks to rebirth!");
+    }
+}
+
 function playClickSound() {
     const sound = document.getElementById("clickSound");
     sound.currentTime = 0;
@@ -64,6 +111,9 @@ function render() {
     document.getElementById("totalClicks").innerText = formatNumber(totalClicks);
     document.getElementById("currentMultiplier").innerText = multiplier.toFixed(2) + "×";
     document.getElementById("autoCount").innerText = autoClickers;
+    document.getElementById("currentWorld").innerText = worlds[currentWorld].name;
+    document.getElementById("rebirthCount").innerText = rebirthCount;
+    document.getElementById("rebirthMultiplier").innerText = rebirthMultiplier + "×";
 }
 
 document.getElementById("clickBtn").onclick = () => {
@@ -74,6 +124,7 @@ document.getElementById("clickBtn").onclick = () => {
 };
 
 document.getElementById("buyAuto").onclick = buyAutoClicker;
+document.getElementById("rebirthBtn").onclick = rebirth;
 
 document.querySelectorAll(".multipliers button").forEach(btn => {
     btn.onclick = () => {
@@ -84,4 +135,5 @@ document.querySelectorAll(".multipliers button").forEach(btn => {
 });
 
 initUpgrades();
+initWorlds();
 render();
