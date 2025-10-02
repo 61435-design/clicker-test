@@ -8,6 +8,9 @@ let upgradeCount = [];
 let rebirthCount = 0;
 let rebirthMultiplier = 1;
 
+let autoRebirthEnabled = false;
+let automationEnabled = true;
+
 const prefixes = ["M", "B", "T", "Q", "q", "s", "S", "Oc", "N", "D", "UD", "DD", "TD", "QD", "qD", "sD", "SD", "OcD", "ND", "V", "UV", "DV", "TV", "QV", "qV", "sV", "SV", "OcV", "NV", "Tr", "UTr", "DTr", "TTr", "QTr", "qTr", "sTr", "STr", "OcTr", "NTr", "Quadragontillion"];
 
 const worlds = [
@@ -64,16 +67,21 @@ function buyAutoClicker() {
     if (clicks >= cost) {
         clicks -= cost;
         autoClickers++;
-        if (!autoInterval) {
-            autoInterval = setInterval(() => {
-                clicks += clickPower * multiplier;
-                totalClicks += clickPower * multiplier;
-                render();
-            }, 1000);
-        }
+        if (!autoInterval) startAutoClickers();
         playClickSound();
         render();
     }
+}
+
+function startAutoClickers() {
+    autoInterval = setInterval(() => {
+        if (automationEnabled) {
+            clicks += clickPower * multiplier * autoClickers;
+            totalClicks += clickPower * multiplier * autoClickers;
+            render();
+        }
+        if (autoRebirthEnabled && clicks >= 1000) rebirth(true);
+    }, 1000);
 }
 
 function changeWorld(index) {
@@ -82,8 +90,8 @@ function changeWorld(index) {
     render();
 }
 
-function rebirth() {
-    if (clicks >= 1000) {
+function rebirth(isAuto = false) {
+    if (clicks >= 1000 || isAuto) {
         clicks = 0;
         totalClicks = 0;
         rebirthCount++;
@@ -91,13 +99,10 @@ function rebirth() {
         multiplier = worlds[currentWorld].multiplier * rebirthMultiplier;
         clickPower = 1;
         upgradeCount = Array(100).fill(0);
-        autoClickers = 0;
-        clearInterval(autoInterval);
-        autoInterval = null;
         playClickSound();
         render();
     } else {
-        alert("You need at least 1000 clicks to rebirth!");
+        if (!isAuto) alert("You need at least 1000 clicks to rebirth!");
     }
 }
 
@@ -139,7 +144,15 @@ document.getElementById("clickBtn").onclick = () => {
 };
 
 document.getElementById("buyAuto").onclick = buyAutoClicker;
-document.getElementById("rebirthBtn").onclick = rebirth;
+document.getElementById("rebirthBtn").onclick = () => rebirth(false);
+
+document.getElementById("automationToggle").onchange = (e) => {
+    automationEnabled = e.target.checked;
+};
+
+document.getElementById("autoRebirthToggle").onchange = (e) => {
+    autoRebirthEnabled = e.target.checked;
+};
 
 document.querySelectorAll(".multipliers button").forEach(btn => {
     btn.onclick = () => {
@@ -152,3 +165,4 @@ document.querySelectorAll(".multipliers button").forEach(btn => {
 initUpgrades();
 initWorlds();
 render();
+startAutoClickers();
