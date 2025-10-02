@@ -1,6 +1,7 @@
 let clicks = 0;
 let totalClicks = 0;
 let multiplier = 1;
+let clickPower = 1;
 let autoClickers = 0;
 let autoInterval;
 let upgradeCount = [];
@@ -53,7 +54,7 @@ function buyUpgrade(index) {
     if (clicks >= cost) {
         clicks -= cost;
         upgradeCount[index]++;
-        multiplier += 0.01;
+        clickPower += 1; // upgrades increase click power
         playClickSound();
         render();
     }
@@ -66,8 +67,8 @@ function buyAutoClicker() {
         autoClickers++;
         if (!autoInterval) {
             autoInterval = setInterval(() => {
-                clicks += multiplier;
-                totalClicks += multiplier;
+                clicks += clickPower * multiplier;
+                totalClicks += clickPower * multiplier;
                 render();
             }, 1000);
         }
@@ -89,6 +90,7 @@ function rebirth() {
         rebirthCount++;
         rebirthMultiplier = Math.pow(10, rebirthCount + 1);
         multiplier = worlds[currentWorld].multiplier * rebirthMultiplier;
+        clickPower = 1;
         upgradeCount = Array(100).fill(0);
         autoClickers = 0;
         clearInterval(autoInterval);
@@ -114,11 +116,12 @@ function render() {
     document.getElementById("currentWorld").innerText = worlds[currentWorld].name;
     document.getElementById("rebirthCount").innerText = rebirthCount;
     document.getElementById("rebirthMultiplier").innerText = rebirthMultiplier + "×";
+    document.getElementById("clickPowerDisplay").innerText = clickPower;
 }
 
 document.getElementById("clickBtn").onclick = () => {
-    clicks += multiplier;
-    totalClicks += multiplier;
+    clicks += clickPower * multiplier;
+    totalClicks += clickPower * multiplier;
     playClickSound();
     render();
 };
