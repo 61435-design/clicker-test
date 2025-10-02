@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, black, #333);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 3em;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+button {
+    padding: 12px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #444, #222);
+    color: white;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(145deg, #555, #333);
+}
+
+#clickBtn {
+    font-size: 28px;
+    padding: 25px;
+    margin-bottom: 10px;
+}
+
+.upgrades, .automation, .multipliers, .stats {
+    margin-top: 20px;
+    background: rgba(0,0,0,0.6);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+}
+
+.upgrades h2, .automation h2, .multipliers h2, .stats h2 {
+    margin-bottom: 10px;
+}
+
+.upgrades button {
+    display: block;
+    width: 90%;
+    margin: 5px auto;
+}
+
+.click-area {
+    margin-bottom: 20px;
+}
+
+#clickCount {
+    font-size: 24px;
+    margin-top: 10px;
+}
